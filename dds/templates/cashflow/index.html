@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h2>Движение денежных средств</h2>
+    <a class="btn btn-primary" href="{% url 'transaction_create' %}">+ Новая запись</a>
+    <a class="btn btn-primary" href="{% url 'status_create' %}">+ Новый статус</a>
+    <a class="btn btn-primary" href="{% url 'type_create' %}">+ Новый тип</a>
+    <a class="btn btn-primary" href="{% url 'cats_create' %}">+ Новая категория</a>
+    <a class="btn btn-primary" href="{% url 'subcats_create' %}">+ Новая подкатегория</a>
+    <table class="table mt-3">
+    <thead>
+        <tr>
+            <th>Дата</th><th>Статус</th><th>Тип</th><th>Категория</th><th>Подкатегория</th><th>Сумма</th><th>Комментарий</th><th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for t in transactions %}
+            <tr>
+                <td>{{ t.date_created }}</td>
+                <td>{{ t.status }}
+                    {% if t.status %}
+                        <a href="{{ t.status.get_absolute_url }}">✏️</a>
+                        <a href="{% url 'status_delete' t.status.pk %}">🗑️</a>
+                    {% endif %}
+                </td>
+                <td>{{ t.type }}
+                    {% if t.type %}
+                        <a href="{{ t.type.get_absolute_url }}">✏️</a>
+                        <a href="{% url 'transaction_delete' t.type.pk %}">🗑️</a>
+                    {% endif %}
+                </td>
+                <td>{{ t.category }}
+                    {% if t.category %}
+                        <a href="{{ t.category.get_absolute_url }}">✏️</a>
+                        <a href="{% url 'cats_delete' t.category.pk %}">🗑️</a>
+                    {% endif %}
+                </td>
+                <td>{{ t.subcategory }}
+                    {% if t.subcategory %}
+                        <a href="{{ t.subcategory.get_absolute_url }}">✏️</a>
+                        <a href="{% url 'subcats_delete' t.subcategory.pk %}">🗑️</a>
+                    {% endif %}
+                </td>
+                <td>{{ t.amount }} ₽</td>
+                <td>{{ t.comment }}</td>
+                <td>
+                    <a href="{{ t.get_absolute_url }}">✏️</a>
+                    <a href="{% url 'transaction_delete' t.pk %}">🗑️</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+    </table>
+{% endblock %}

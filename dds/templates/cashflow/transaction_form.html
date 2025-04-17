@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h2>{% if form.instance.pk %} Редактировать {% else %} Новая {% endif %} запись</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn btn-success" type="submit">Сохранить</button>
+    </form>
+    <a href="{% url 'index' %}">← Назад</a>
+{% endblock %}
+{% block extra_js %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $("#id_type").change(function () {
+      var typeId = $(this).val();
+      $.ajax({
+          url: "{% url 'load_categories' %}",
+          data: {
+              'type': typeId
+          },
+          success: function (data) {
+              $("#id_category").html("");
+              $("#id_subcategory").html("<option value=''>---------</option>");
+              for (var i = 0; i < data.length; i++) {
+                  $("#id_category").append(`<option value="${data[i].id}">${data[i].name}</option>`);
+              }
+          }
+      });
+  });
+
+  $("#id_category").change(function () {
+      var categoryId = $(this).val();
+      $.ajax({
+          url: "{% url 'load_subcategories' %}",
+          data: {
+              'category': categoryId
+          },
+          success: function (data) {
+              $("#id_subcategory").html("");
+              for (var i = 0; i < data.length; i++) {
+                  $("#id_subcategory").append(`<option value="${data[i].id}">${data[i].name}</option>`);
+              }
+          }
+      });
+  });
+</script>
+{% endblock %}

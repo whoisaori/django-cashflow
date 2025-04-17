@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h2>Удалить запись?</h2>
+    <p>Вы уверены, что хотите удалить запись на {{ transaction.date_created }}?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button class="btn btn-danger" type="submit">Удалить</button>
+    </form>
+    <a href="{% url 'index' %}">← Назад</a>
+{% endblock %}
